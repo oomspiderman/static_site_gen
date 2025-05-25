@@ -1,10 +1,13 @@
 from htmlnode import HTMLNode
 from textnode import TextNode
 from textnode import TextType
+from copy_directory import copy_directory_recursive
 
 from split_nodes_delimiter import split_nodes_delimiter
 
 from extract_markdown import *
+
+copy_directory_recursive("static", "public")
 
 my_text_node = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
 print(my_text_node)
