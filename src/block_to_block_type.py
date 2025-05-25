@@ -18,7 +18,7 @@ def block_to_block_type(text):
 
     lines = text.splitlines()
 
-    if all(line.startswith("> ") for line in lines):
+    if all(line.strip().startswith(">") for line in text.splitlines()):
         return BlockType.QUOTE
 
     if all(line.startswith("- ") for line in lines):

@@ -1,14 +1,17 @@
-
 def markdown_to_blocks(markdown):
-    parts = markdown.split("\n\n")
-    cleaned = []
+    lines = markdown.strip().splitlines()
+    blocks = []
+    current_block = []
 
-    for part in parts:
-        stripped = part.strip()
-        if stripped:  # Only add non-empty parts
-            cleaned.append(stripped)
+    for line in lines:
+        if line.strip() == "":
+            if current_block:
+                blocks.append("\n".join(current_block).strip())
+                current_block = []
+        else:
+            current_block.append(line)
 
-    # OR ... cleaned = [part.strip() for part in markdown.split("\n\n") if part.strip()]
+    if current_block:
+        blocks.append("\n".join(current_block).strip())
 
-    return cleaned
-    
+    return blocks

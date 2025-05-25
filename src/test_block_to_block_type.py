@@ -52,5 +52,17 @@ class TestBlockToBlockType(unittest.TestCase):
         block = "This is a regular paragraph of markdown text."
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
+    def test_multi_paragraph_quote_block(self):
+        md = """> "I am in fact a Hobbit in all but size."
+>
+> -- J.R.R. Tolkien"""
+    
+        from markdown_to_blocks import markdown_to_blocks
+        from block_to_block_type import block_to_block_type
+    
+        blocks = markdown_to_blocks(md)
+        self.assertEqual(len(blocks), 1)
+        self.assertEqual(block_to_block_type(blocks[0]), BlockType.QUOTE)
+
 if __name__ == "__main__":
     unittest.main()

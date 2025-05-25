@@ -31,9 +31,12 @@ def block_to_html_node(block):
         return ParentNode("pre", [code_node])
 
     if block_type == BlockType.QUOTE:
-        lines = [line[2:] for line in block.split("\n")]
+        # Remove leading '> ' or just '>' from each line
+        lines = [line.lstrip("> ").strip() for line in block.splitlines()]
         joined = "\n".join(lines)
+        # Let text_to_children parse paragraphs/formatting normally
         return ParentNode("blockquote", text_to_children(joined))
+
 
     if block_type == BlockType.UNORDERED_LIST:
         lines = [line[2:] for line in block.split("\n")]
