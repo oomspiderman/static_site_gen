@@ -172,8 +172,3 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
-
-# Add the public/ directory to your .gitignore file. 
-# This is where the generated site will live. As a general rule, 
-# it's bad to commit generated stuff, especially if it can be regenerated easily.
-public/
