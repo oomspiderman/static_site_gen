@@ -32,25 +32,24 @@ import os
 from site_generator import generate_page
 from copy_directory_recursive import copy_directory_recursive
 
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    for root, dirs, files in os.walk(dir_path_content):
+        for file in files:
+            if file.endswith(".md"):
+                src_path = os.path.join(root, file)
+                rel_path = os.path.relpath(src_path, dir_path_content)
+                rel_path_html = os.path.splitext(rel_path)[0] + ".html"
+                dest_path = os.path.join(dest_dir_path, rel_path_html)
+
+                # Make sure destination subdirectories exist
+                os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+
+                print(f"✅ Generating {dest_path} from {src_path}")
+                generate_page(src_path, template_path, dest_path)
+
 if __name__ == "__main__":
-    # Copy static assets
+    from copy_directory_recursive import copy_directory_recursive
+
     copy_directory_recursive("static", "public")
+    generate_pages_recursive("content", "template.html", "public")
 
-    # Generate the homepage
-    generate_page("content/index.md", "template.html", "public/index.html")
-
-    blog_dir = "content/blog"
-    
-    if not os.path.exists(blog_dir):
-        print(f"❌ Directory '{blog_dir}' does not exist!")
-    else:
-        for foldername in os.listdir(blog_dir):
-            folder_path = os.path.join(blog_dir, foldername)
-            index_md = os.path.join(folder_path, "index.md")
-            if os.path.isdir(folder_path) and os.path.exists(index_md):
-                slug = foldername
-                output_dir = os.path.join("public", "blog", slug)
-                os.makedirs(output_dir, exist_ok=True)
-                output_path = os.path.join(output_dir, "index.html")
-                print(f"✅ Generating {output_path} from {index_md}")
-                generate_page(index_md, "template.html", output_path)
