@@ -28,9 +28,29 @@
 # print(extract_markdown_links(text))
 # # [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
 
+import os
 from site_generator import generate_page
 from copy_directory_recursive import copy_directory_recursive
 
 if __name__ == "__main__":
+    # Copy static assets
     copy_directory_recursive("static", "public")
+
+    # Generate the homepage
     generate_page("content/index.md", "template.html", "public/index.html")
+
+    blog_dir = "content/blog"
+    
+    if not os.path.exists(blog_dir):
+        print(f"❌ Directory '{blog_dir}' does not exist!")
+    else:
+        for foldername in os.listdir(blog_dir):
+            folder_path = os.path.join(blog_dir, foldername)
+            index_md = os.path.join(folder_path, "index.md")
+            if os.path.isdir(folder_path) and os.path.exists(index_md):
+                slug = foldername
+                output_dir = os.path.join("public", "blog", slug)
+                os.makedirs(output_dir, exist_ok=True)
+                output_path = os.path.join(output_dir, "index.html")
+                print(f"✅ Generating {output_path} from {index_md}")
+                generate_page(index_md, "template.html", output_path)
